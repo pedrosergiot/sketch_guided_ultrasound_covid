@@ -16,13 +16,13 @@ num_folds = 10
 kfold_shuffle = False
 test_fold = int(sys.argv[2])
 
-images_path = '../ultrasound_images/croped_images_gray/'
-sketches_path = '../images_edges_detection/croped_images_canny5_sketchs/'
+images_path = '../ultrasound_images/croped_images_gray_smaller/'
+sketches_path = '../images_edges_detection/croped_images_gray_smaller/croped_images_canny5_sketchs/'
 current_path = './cannyedges_sketchguided/kfold10/Fold' + str(test_fold) + '/'
 
 
 # define the discriminator
-def define_discriminator(in_shape=(256,256,1)):
+def define_discriminator(in_shape=(128,128,1)):
   # weight initialization
   init = tf.random_normal_initializer(0., 0.02)
   # source image input (Hough lines)
@@ -60,7 +60,7 @@ def define_discriminator(in_shape=(256,256,1)):
 
 
 # define the standalone generator model
-def define_generator(in_shape=(256,256,1)):
+def define_generator(in_shape=(128,128,1)):
   # weight initialization
   init = tf.random_normal_initializer(0., 0.02)
   # define model
@@ -133,7 +133,7 @@ train_sketch_images = sketch_images[np.concatenate(np.delete(folds_ind, [test_fo
 gen_img_path = current_path + class_trained + '/generated_images/'
 
 # MODEL PARAMETERS
-IMG_SHAPE = (256, 256, 1)
+IMG_SHAPE = (128, 128, 1)
 BATCH_SIZE = 8
 
 # Set the number of epochs for trainining.
