@@ -156,7 +156,8 @@ sketchguided.compile(
     d_optimizer=discriminator_optimizer,
     g_optimizer=generator_optimizer,
     g_loss_fn=generator_loss,
-    d_loss_fn=discriminator_loss,
+    d_loss_fn=discriminator_loss, 
+    wasserstein_loss=wasserstein_loss
 )
 
 

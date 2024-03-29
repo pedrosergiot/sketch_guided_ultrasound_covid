@@ -1,5 +1,5 @@
 __all__ = ["SketchGuided", "MyCSVLogger", "GANMonitor", 
-           "generator_loss", "discriminator_loss",
+           "generator_loss", "discriminator_loss", "wasserstein_loss",
            "residual_block", "encoder_block", "decoder_block"]
 
 import os
@@ -19,12 +19,13 @@ class SketchGuided(tf.keras.Model):
     self.discriminator = discriminator
     self.generator = generator
 
-  def compile(self, d_optimizer, g_optimizer, d_loss_fn, g_loss_fn):
+  def compile(self, d_optimizer, g_optimizer, d_loss_fn, g_loss_fn, wasserstein_loss):
     super(SketchGuided, self).compile()
     self.d_optimizer = d_optimizer
     self.g_optimizer = g_optimizer
     self.d_loss_fn = d_loss_fn
     self.g_loss_fn = g_loss_fn
+    self.wasserstein_loss = wasserstein_loss
 
 
   #def train_step(self, real_images):
@@ -50,7 +51,10 @@ class SketchGuided(tf.keras.Model):
     self.g_optimizer.apply_gradients(zip(generator_gradients, self.generator.trainable_variables))
     self.d_optimizer.apply_gradients(zip(discriminator_gradients, self.discriminator.trainable_variables))
 
-    return {"disc_loss": disc_loss, "gen_total_loss": gen_total_loss, "gen_l1_loss": gen_l1_loss}
+    wasser_loss = self.wasserstein_loss(target, gen_output)
+    
+    return {"disc_loss": disc_loss, "gen_total_loss": gen_total_loss, 
+            "gen_l1_loss": gen_l1_loss, "wasser_loss": wasser_loss}
 
 
   def test_step(self, data):
@@ -63,7 +67,9 @@ class SketchGuided(tf.keras.Model):
 
     disc_loss = self.d_loss_fn(disc_real_output, disc_generated_output)
 
-    return {"disc_loss": disc_loss}
+    wasser_loss = self.wasserstein_loss(target, generated_images)
+
+    return {"disc_loss": disc_loss, "wasser_loss": wasser_loss}
 
 
 # Keras callback to periodically save generated images
@@ -136,6 +142,12 @@ def discriminator_loss(disc_real_output, disc_generated_output):
   total_disc_loss = real_loss + generated_loss
 
   return total_disc_loss
+
+
+def wasserstein_loss(real_img, fake_img):
+    real_loss = tf.reduce_mean(real_img)
+    fake_loss = tf.reduce_mean(fake_img)
+    return fake_loss - real_loss
 
 
 def residual_block(x: tf.Tensor, filters: int, kernel_size: int = 3) -> tf.Tensor:
