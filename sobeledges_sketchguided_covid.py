@@ -134,10 +134,10 @@ gen_img_path = current_path + class_trained + '/generated_images/'
 
 # MODEL PARAMETERS
 IMG_SHAPE = (128, 128, 1)
-BATCH_SIZE = 8
+BATCH_SIZE = 16
 
 # Set the number of epochs for trainining.
-epochs = 1000
+epochs = 2000
 
 # Defining optimizers
 generator_optimizer = Adam(learning_rate=0.0002, beta_1=0.5, beta_2=0.999)
@@ -174,7 +174,7 @@ if not os.path.exists(checkpoint_path):
 STEPS_PER_EPOCH = train_real_images.shape[0]/BATCH_SIZE
 checkpoint_cbk = ModelCheckpoint(filepath=checkpoint_path + 'epoch-{epoch:04d}.ckpt',
                                  monitor='d_loss',
-                                 save_freq=int(100*STEPS_PER_EPOCH),
+                                 save_freq=int(500*STEPS_PER_EPOCH),
                                  mode='max',
                                  save_weights_only=True,
                                  verbose=1)
