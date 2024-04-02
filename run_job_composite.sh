@@ -2,10 +2,10 @@
 sbatch <<EOT
 #!/bin/bash
 
-#SBATCH --job-name=cannyedges_sketchguided_$1_$2
+#SBATCH --job-name=composite_sketchguided_$1_$2
 #SBATCH --partition=gpu-large
-#SBATCH --output=cannyedges_sketchguided_$1_$2.out
-#SBATCH --error=cannyedges_sketchguided_$1_$2.err
+#SBATCH --output=composite_sketchguided_$1_$2.out
+#SBATCH --error=composite_sketchguided_$1_$2.err
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --mail-type=ALL

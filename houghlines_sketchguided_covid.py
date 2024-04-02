@@ -18,7 +18,7 @@ test_fold = int(sys.argv[2])
 
 images_path = '../ultrasound_images/croped_images_gray_smaller/'
 hough_path = '../images_edges_detection/croped_images_gray_smaller/PATH_TO_HOUGH_LINES/'
-current_path = './houghlines_sketchguided/kfold10/Fold1/'
+current_path = './houghlines_sketchguided/kfold10/Fold' + str(test_fold) + '/'
 
 
 # define the discriminator

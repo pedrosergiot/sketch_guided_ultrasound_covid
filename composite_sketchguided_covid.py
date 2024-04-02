@@ -19,7 +19,7 @@ test_fold = int(sys.argv[2])
 
 images_path = '../ultrasound_images/croped_images_gray_smaller/'
 sketches_path = '../images_edges_detection/croped_images_gray_smaller/composite_sobel_canny3_sketchs/'
-current_path = './composite_sketchguided/kfold10/Fold1/'
+current_path = './composite_sketchguided/kfold10/Fold' + str(test_fold) + '/'
 
 
 # define the discriminator
