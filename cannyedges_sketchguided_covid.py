@@ -172,7 +172,7 @@ if not os.path.exists(checkpoint_path):
     os.makedirs(checkpoint_path)
 
 STEPS_PER_EPOCH = train_real_images.shape[0]/BATCH_SIZE
-checkpoint_cbk = ModelCheckpoint(filepath=checkpoint_path + 'epoch-{epoch:04d}.ckpt',
+checkpoint_cbk = ModelCheckpoint(filepath=checkpoint_path + 'epoch-{epoch:04d}.weights.h5',
                                  monitor='d_loss',
                                  save_freq=int(500*STEPS_PER_EPOCH),
                                  mode='max',
@@ -184,7 +184,7 @@ history_cbk = MyCSVLogger(logfilename)
 
 
 # Start training the model.
-#sketchguided.load_weights(current_path + class_trained + '/checkpoint/epoch-0398.ckpt')
+#sketchguided.load_weights(current_path + class_trained + '/checkpoint/epoch-0398.weights.h5')
 history = sketchguided.fit(train_sketch_images, train_real_images,
                       validation_data=(val_sketch_images, val_real_images),
                       batch_size=BATCH_SIZE, epochs=epochs,
