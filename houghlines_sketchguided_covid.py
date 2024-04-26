@@ -133,7 +133,7 @@ gen_img_path = current_path + class_trained + '/generated_images/'
 
 # MODEL PARAMETERS
 IMG_SHAPE = (128, 128, 1)
-BATCH_SIZE = 16
+BATCH_SIZE = 64
 
 # Set the number of epochs for trainining.
 epochs = 2000
