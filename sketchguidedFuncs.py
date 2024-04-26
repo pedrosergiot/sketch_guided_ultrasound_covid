@@ -60,16 +60,9 @@ class SketchGuided(tf.keras.Model):
   def test_step(self, data):
     input_image, target = data
     generated_images = self.generator(input_image)
-    # Get the logits for generated images
-    disc_generated_output = self.discriminator([input_image, generated_images])
-    # Get the logits for the real images
-    disc_real_output = self.discriminator([input_image, target])
-
-    disc_loss = self.d_loss_fn(disc_real_output, disc_generated_output)
-
     wasser_loss = self.wasserstein_loss(target, generated_images)
 
-    return {"disc_loss": disc_loss, "wasser_loss": wasser_loss}
+    return {"wasser_loss": wasser_loss}
 
 
 # Keras callback to periodically save generated images
@@ -113,7 +106,7 @@ class MyCSVLogger(tf.keras.callbacks.Callback):
     if not os.path.exists(self.filename):
       self.csv_file = open(self.filename, 'a')
       self.writer = csv.writer(self.csv_file)
-      self.writer.writerow(['disc_loss', 'gen_total_loss', 'gen_l1_loss', 'val_disc_loss'])
+      self.writer.writerow(['disc_loss', 'gen_l1_loss', 'gen_total_loss', 'wasser_loss', 'loss', 'val_loss'])
       self.csv_file.close()
 
   def on_epoch_end(self, epoch, logs=None):
