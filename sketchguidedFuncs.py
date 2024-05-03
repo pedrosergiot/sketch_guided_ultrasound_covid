@@ -51,7 +51,7 @@ class SketchGuided(tf.keras.Model):
     self.g_optimizer.apply_gradients(zip(generator_gradients, self.generator.trainable_variables))
     self.d_optimizer.apply_gradients(zip(discriminator_gradients, self.discriminator.trainable_variables))
 
-    wasser_loss = self.wasserstein_loss(target, gen_output)
+    wasser_loss = self.wasserstein_loss(disc_real_output, disc_generated_output)
     
     return {"disc_loss": disc_loss, "gen_total_loss": gen_total_loss, 
             "gen_l1_loss": gen_l1_loss, "wasser_loss": wasser_loss}
@@ -60,7 +60,12 @@ class SketchGuided(tf.keras.Model):
   def test_step(self, data):
     input_image, target = data
     generated_images = self.generator(input_image)
-    wasser_loss = self.wasserstein_loss(target, generated_images)
+
+    disc_generated_output = self.discriminator([input_image, generated_images])
+    # Get the logits for the real images
+    disc_real_output = self.discriminator([input_image, target])
+
+    wasser_loss = self.wasserstein_loss(disc_real_output, disc_generated_output)
 
     return {"wasser_loss": wasser_loss}
 
