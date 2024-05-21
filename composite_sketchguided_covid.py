@@ -111,10 +111,21 @@ real_images = (real_images - 127.5)/127.5
 sketch_images = (sketch_images - 127.5)/127.5
 
 
+patients = load(images_path + 'images_' + class_trained)['patients']
+unique_patients = np.unique(patients)
+
 # Separating fold K-Fold
+folds_ind = []
+
 kf = KFold(n_splits=num_folds, shuffle=kfold_shuffle)
 
-folds_ind = [test_index for _, test_index in kf.split(real_images)]
+for i, (train_index, test_index) in enumerate(kf.split(unique_patients)):
+  test_patients = unique_patients[test_index]
+
+  tmp_test = np.isin(patients, test_patients)
+  ind_imgs_test = [k for k, x in enumerate(tmp_test) if x]
+
+  folds_ind.append(ind_imgs_test)
 
 test_real_images = real_images[folds_ind[test_fold]]
 test_sketch_images = sketch_images[folds_ind[test_fold]]
@@ -123,12 +134,13 @@ if test_fold == 9:
   val_fold = 0
 else:
   val_fold = test_fold + 1
-  
+
 val_real_images = real_images[folds_ind[val_fold]]
 val_sketch_images = sketch_images[folds_ind[val_fold]]
 
 train_real_images = real_images[np.concatenate([x for j,x in enumerate(folds_ind) if j not in [test_fold, val_fold]])]
 train_sketch_images = sketch_images[np.concatenate([x for j,x in enumerate(folds_ind) if j not in [test_fold, val_fold]])]
+
 
 
 gen_img_path = current_path + class_trained + '/generated_images/'
