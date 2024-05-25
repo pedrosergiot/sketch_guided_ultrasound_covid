@@ -150,7 +150,7 @@ IMG_SHAPE = (128, 128, 1)
 BATCH_SIZE = 64
 
 # Set the number of epochs for trainining.
-epochs = 2000
+epochs = 10000
 
 # Defining optimizers
 generator_optimizer = Adam(learning_rate=0.0002, beta_1=0.5, beta_2=0.999)
