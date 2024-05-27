@@ -192,6 +192,9 @@ checkpoint_cbk = ModelCheckpoint(filepath=checkpoint_path + 'epoch-{epoch:04d}.w
                                  verbose=1)
 
 logfilename = current_path + class_trained + '/history.csv'
+if os.path.exists(logfilename):
+    os.remove(logfilename)
+
 history_cbk = MyCSVLogger(logfilename)
 
 

@@ -146,7 +146,7 @@ gen_img_path = current_path + class_trained + '/generated_images/'
 
 # MODEL PARAMETERS
 IMG_SHAPE = (128, 128, 1)
-BATCH_SIZE = 64
+BATCH_SIZE = 16
 
 # Set the number of epochs for trainining.
 epochs = 10000
@@ -192,6 +192,9 @@ checkpoint_cbk = ModelCheckpoint(filepath=checkpoint_path + 'epoch-{epoch:04d}.w
                                  verbose=1)
 
 logfilename = current_path + class_trained + '/history.csv'
+if os.path.exists(logfilename):
+    os.remove(logfilename)
+
 history_cbk = MyCSVLogger(logfilename)
 
 
